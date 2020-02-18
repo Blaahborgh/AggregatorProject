@@ -1,0 +1,101 @@
+[
+  {
+    "siteurl": "https://www.royalroad.com" ,
+    "initialurl": "https://www.royalroad.com/fictions/best-rated" ,
+    "listpath": {
+      "tag": "div" ,
+      "attr": "class" ,
+      "attrvalue": "fiction-list-item row"
+    } ,
+    "authorpath": {
+      "tag": "span" ,
+      "attr": "property" ,
+      "attrvalue": "name"
+    } ,
+    "namepath": {
+      "tag": "a" ,
+      "attr": "" ,
+      "attrvalue": ""
+    } ,
+    "tagspath": {
+      "tag": "span" ,
+      "attr": "property" ,
+      "attrvalue": "genre"
+    } ,
+    "descpath": {
+      "tag": "div" ,
+      "attr": "property" ,
+      "attrvalue": "description"
+    } ,
+    "chcountpath": {
+      "tag": "td" ,
+      "attr": "" ,
+      "attrvalue": "" ,
+      "getattr": "data-order"
+    } ,
+    "urlpath": {
+      "tag": "a" ,
+      "attr": "" ,
+      "attrvalue": "" ,
+      "getattr": "href"
+    } ,
+    "imagepath": {
+      "tag": "img" ,
+      "attr": "property" ,
+      "attrvalue": "image" ,
+      "getattr": "src"
+    } ,
+    "nextpagepath": ""
+  } ,
+  {
+    "COMMENT1": "единой страницы для доступа ко ВСЕМ книгам нет, надо запускать скрипт по отдельности по страницам категорий(21)" ,
+    "COMMENT2": "модерация то ли слишком мягкая, то ли ее совсем нет - придется отсеивать мусор самостоятельно" ,
+    "COMMENT3": "непонятно как разбивать тэги - см. код страницы SOLVED?" ,
+    "siteurl": "https://www.fictionpress.com" ,
+    "initialurl": "https://www.fictionpress.com/fiction/Fantasy/" ,
+    "listpath": {
+      "tag": "div" ,
+      "attr": "class" ,
+      "attrvalue": "z-list zhover zpointer"
+    } ,
+    "authorpath": {
+      "tag": "a" ,
+      "attr": "class" ,
+      "attrvalue": "xcontrast_txt"
+    } ,
+    "namepath": {
+      "tag": "a" ,
+      "attr": "class" ,
+      "attrvalue": "stitle"
+    } ,
+    "tagspath": {
+      "tag": "span" ,
+      "attr": "class" ,
+      "attrvalue": "xgray xcontrast_txt"
+    } ,
+    "descpath": {
+      "tag": "div" ,
+      "attr": "class" ,
+      "attrvalue": "xcontrast_txt"
+    } ,
+    "chcountpath": {
+      "tag": "option" ,
+      "attr": "" ,
+      "attrvalue": "" ,
+      "getattr": "value"
+    } ,
+    "urlpath": {
+      "tag": "a" ,
+      "attr": "class" ,
+      "attrvalue": "stitle" ,
+      "getattr": "href"
+    } ,
+    "imagepath": {
+      "tag": "img" ,
+      "attr": "class" ,
+      "attrvalue": "lazy cimage" ,
+      "getattr": "data-original"
+    } ,
+    "nextpagepath": ""
+  }
+]
