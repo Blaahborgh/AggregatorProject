@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6cc9a4c9-e2e5-47a9-b3cd-55d3693dd7ce" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/Items/management/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/Items/management/commands/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/Items/management/commands/parser.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/configs.json" afterDir="false" />
+    <list default="true" id="6cc9a4c9-e2e5-47a9-b3cd-55d3693dd7ce" name="Default Changelist" comment="get_text() -&gt; get_text(strip = True)  in order to get rid of excessive symbols in output">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Items/management/commands/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Items/management/commands/parser.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db.sqlite3" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -154,6 +150,7 @@
       <workItem from="1581989147667" duration="1895000" />
       <workItem from="1582006761293" duration="32000" />
       <workItem from="1582006966716" duration="10766000" />
+      <workItem from="1582023416044" duration="508000" />
     </task>
     <servers />
   </component>

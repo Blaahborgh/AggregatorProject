@@ -19,25 +19,25 @@ def fiction_page_soup(url):
     return BeautifulSoup(page1.text, 'html.parser')
 
 def get_author(fictionpage):
-    return fictionpage.find(config[i]['authorpath']['tag'], {config[i]['authorpath']['attr'] : config[i]['authorpath']['attrvalue']}).get_text()
+    return fictionpage.find(config[i]['authorpath']['tag'], {config[i]['authorpath']['attr'] : config[i]['authorpath']['attrvalue']}).get_text(strip=True)
 
 def get_name(fiction):
-    return fiction.find(config[i]['namepath']['tag'], {config[i]['namepath']['attr'] : config[i]['namepath']['attrvalue']}).get_text()
+    return fiction.find(config[i]['namepath']['tag'], {config[i]['namepath']['attr'] : config[i]['namepath']['attrvalue']}).get_text(strip=True)
 
 def get_tags(fictionpage):
     if (config[i]['siteurl'] == "https://www.fictionpress.com"):
         for tag in fictionpage.find_all(config[i]['tagspath']['tag'], {config[i]['tagspath']['attr'] : config[i]['tagspath']['attrvalue']}):
-            line = tag.get_text().split(' - ')
+            line = tag.get_text(strip=True).split(' - ')
             genres = line[2].split('/')
             return genres
     else:
         tags = []
         for tag in fictionpage.find_all(config[i]['tagspath']['tag'], {config[i]['tagspath']['attr'] : config[i]['tagspath']['attrvalue']}):
-            tags.append(tag.get_text())
+            tags.append(tag.get_text(strip=True))
         return tags
 
 def get_desc(fictionpage):
-    return fictionpage.find(config[i]['descpath']['tag'], {config[i]['descpath']['attr'] : config[i]['descpath']['attrvalue']}).get_text()
+    return fictionpage.find(config[i]['descpath']['tag'], {config[i]['descpath']['attr'] : config[i]['descpath']['attrvalue']}).get_text(strip=True)
 
 def get_chcount(fictionpage):
     for chapters in fictionpage.find_all(config[i]['chcountpath']['tag'], {config[i]['chcountpath']['attr'] : config[i]['chcountpath']['attrvalue']}): pass
