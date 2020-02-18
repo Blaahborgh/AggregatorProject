@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6cc9a4c9-e2e5-47a9-b3cd-55d3693dd7ce" name="Default Changelist" comment="Parser integrated into backend">
+    <list default="true" id="6cc9a4c9-e2e5-47a9-b3cd-55d3693dd7ce" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/Items/management/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Items/management/commands/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Items/management/commands/parser.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/configs.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db.sqlite3" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,11 +28,6 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="PREVIOUS_COMMIT_AUTHORS">
-      <list>
-        <option value="Blaahborgh &lt;richardsighfer@gmail.com&gt;" />
-      </list>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1WkUxotGeOaYYN6uFf0EyhRJJU0" />
@@ -152,16 +153,8 @@
       <workItem from="1581146106669" duration="6269000" />
       <workItem from="1581989147667" duration="1895000" />
       <workItem from="1582006761293" duration="32000" />
-      <workItem from="1582006966716" duration="11014000" />
+      <workItem from="1582006966716" duration="10766000" />
     </task>
-    <task id="LOCAL-00001" summary="Parser integrated into backend">
-      <created>1582017905791</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1582017905791</updated>
-    </task>
-    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -182,8 +175,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Parser integrated into backend" />
-    <option name="LAST_COMMIT_MESSAGE" value="Parser integrated into backend" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/AggregatorProject$Parser.coverage" NAME="Parser Coverage Results" MODIFIED="1582009104662" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend/Items" />
