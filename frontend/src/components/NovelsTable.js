@@ -10,13 +10,15 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import axios from 'axios'
 
-class DataTable extends React.Component{
+class NovelsTable extends React.Component{
     constructor(){
         super();
         this.state = {
             columns: [
-                            {id: 'id', label: 'Номер', minWidth: 170},
-                            {id: 'name', label: 'Название', minWidth: 100},
+                            {id: 'id', label: 'ID', minWidth: 170},
+                            {id: 'name', label: 'Name', minWidth: 100},
+                            {id: 'author', label: 'Author'},
+                            {id: 'chcount', label: 'Chapters'}
                         ],
             rows : [],
             classes: makeStyles({
@@ -35,7 +37,7 @@ class DataTable extends React.Component{
     }
 
     componentDidMount (){
-        axios.get('http://127.0.0.1:8000/api/authors').then(response => {
+        axios.get('http://127.0.0.1:8000/api/novels').then(response => {
             this.setState({ rows: response.data });
         });
     }
@@ -129,4 +131,4 @@ async function API()
         });
 };*/
 
-export default DataTable;
+export default NovelsTable;

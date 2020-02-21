@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import Novel, Author, Tag
 
 class NovelSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField(many=False)
+    tags = serializers.StringRelatedField(many=True)
     class Meta:
         model = Novel
         fields = '__all__'

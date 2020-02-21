@@ -1,10 +1,12 @@
 import React from 'react';
 import './App.css';
-import DataTable from "./components/DataTable";
+import NovelsTable from "./components/NovelsTable";
+import NovelsGrid from "./components/NovelsGrid";
+import SpacingGrid from "./components/ExampleGrid";
 
 function App() {
     return (
-        <DataTable/>
+        <NovelsTable/>
     );
 }
 
