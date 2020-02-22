@@ -23,7 +23,7 @@ class NovelsGrid extends React.Component {
             items: [],
             card: makeStyles({
                 root: {
-                    maxWidth: 340
+                    width: 300,
                 }
             })
         }
@@ -37,14 +37,10 @@ class NovelsGrid extends React.Component {
 
     render() {
         return (
-            <Grid container className={this.state.classes.root} spacing={2}>
-                <Grid item xs={12}>
-                    <Grid container justify="center" spacing={this.state.spacing}>
-                        {this.state.items.map(value => {
+                        this.state.items.map(value => {
                             return (
-                                <Grid className={this.state.classes.root} key={value.id}>
-                                    <Card className={this.state.card.root} variant="outlined">
-                                        <CardActionArea>
+                                    <Card className={this.state.card.root} style={{width:300}} key={value.id} variant="outlined">
+                                        <CardActionArea className={this.state.card.root}>
                                             <CardMedia
                                                 component="img"
                                                 height="300"
@@ -61,12 +57,8 @@ class NovelsGrid extends React.Component {
                                             </CardContent>
                                         </CardActionArea>
                                     </Card>
-                                </Grid>
                             )
-                        })}
-                    </Grid>
-                </Grid>
-            </Grid>
+                        })
         );
     }
 }

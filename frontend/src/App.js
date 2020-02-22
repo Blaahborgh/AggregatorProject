@@ -6,7 +6,7 @@ import SpacingGrid from "./components/ExampleGrid";
 
 function App() {
     return (
-        <NovelsTable/>
+        <NovelsGrid/>
     );
 }
 
