@@ -37,7 +37,7 @@ def get_tags(fictionpage):
         return tags
 
 def get_desc(fictionpage):
-    return fictionpage.find(config[i]['descpath']['tag'], {config[i]['descpath']['attr'] : config[i]['descpath']['attrvalue']}).get_text(strip=True)
+    return fictionpage.find(config[i]['descpath']['tag'], {config[i]['descpath']['attr'] : config[i]['descpath']['attrvalue']}).get_text()
 
 def get_chcount(fictionpage):
     for chapters in fictionpage.find_all(config[i]['chcountpath']['tag'], {config[i]['chcountpath']['attr'] : config[i]['chcountpath']['attrvalue']}): pass
