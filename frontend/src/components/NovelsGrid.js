@@ -11,6 +11,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
 import Link from "@material-ui/core/Link";
 import clsx from "clsx";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -37,11 +38,8 @@ const useStyles = makeStyles(theme => ({
     },
     tags: {
         display: "inline",
-        border: "1px solid #000",
-        padding: "3px",
         marginRight: "5px",
-        lineHeight: "250%",
-        whiteSpace: "normal"
+        marginTop: "5px",
     }
 }));
 
@@ -90,10 +88,9 @@ export default function SpacingGrid(props) {
                                         </Typography>
                                         {value.tags.map(tag => {
                                             return (
-                                                <Typography key={value.id + tag} className={classes.tags}
-                                                            variant="body2" color="textSecondary" component="p">
+                                                <Button key={tag} className={classes.tags} variant="contained">
                                                     {tag}
-                                                </Typography>
+                                                </Button>
                                             )
                                         })}
                                     </CardContent>
@@ -111,7 +108,8 @@ export default function SpacingGrid(props) {
                                     </CardActions>
                                     <Collapse in={expanded === value.id} timeout="auto" unmountOnExit>
                                         <CardContent>
-                                            <Typography variant="body1" color="textSecondary" component="p" style={{whiteSpace: "pre-line"}}>
+                                            <Typography variant="body1" color="textSecondary" component="p"
+                                                        style={{whiteSpace: "pre-line"}}>
                                                 {value.desc}
                                             </Typography>
                                         </CardContent>

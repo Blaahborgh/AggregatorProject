@@ -32,18 +32,14 @@ class App extends React.Component {
                         <NovelsGrid novels={this.state.novels}/>
                     </Route>
                     {this.state.novels.map(value => {
-                        return (
-                            <Route exact path={"/novel/" + value.id + "/" + value.name.replace(/ /gi, "_")}>
-                                <Novel novel={value}/>
-                            </Route>
-                        )
-                    })}
-                    {this.state.novels.map(value => {
-                        return (
-                            <Route exact path={"/novel/" + value.id}>
-                                <Redirect to={"/novel/" + value.id + "/" + value.name.replace(/ /gi, "_")}/>
-                            </Route>
-                        )
+                        return [
+                                <Route exact path={"/novel/" + value.id + "/" + value.name.replace(/ /gi, "_")}>
+                                    <Novel novel={value}/>
+                                </Route>,
+                                <Route exact path={"/novel/" + value.id}>
+                                    <Redirect to={"/novel/" + value.id + "/" + value.name.replace(/ /gi, "_")}/>
+                                </Route>
+                        ]
                     })}
                 </Switch>
             </Router>
