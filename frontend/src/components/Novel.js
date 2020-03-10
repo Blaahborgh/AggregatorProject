@@ -24,11 +24,11 @@ export default function Novel(props) {
     const classes = useStyles();
     return (
         <Grid container className={classes.root} justify="center" spacing={2}>
-            <Grid container item xs={10} justify="center">
-                <Grid item xs={4}>
+            <Grid container item xs={8} justify="left">
+                <Grid item xs={3}>
                     <img className={classes.image} src={props.novel.image} alt=""/>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={5}>
                     <Typography gutterBottom variant="h5">
                         {props.novel.name}
                     </Typography>
@@ -49,10 +49,16 @@ export default function Novel(props) {
                     })}
                 </Grid>
             </Grid>
-            <Grid item xs={8}>
-                <Typography variant="body1" color="textSecondary" component="p" style={{whiteSpace: "pre-line"}}>
-                    {props.novel.desc}
-                </Typography>
+            <Grid container item xs={12} justify="left">
+                <Grid item xs={2}>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textSecondary" component="p" style={{whiteSpace: "pre-line"}}>
+                        {props.novel.desc}
+                    </Typography>
+                </Grid>
+                <Grid item xs={4}>
+                </Grid>
             </Grid>
         </Grid>
     )
