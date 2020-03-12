@@ -7,8 +7,8 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Redirect
 } from "react-router-dom";
+import Pagination from "@material-ui/lab/Pagination";
 
 class App extends React.Component {
     constructor() {
@@ -18,39 +18,58 @@ class App extends React.Component {
             novels: [],
             next: "",
             previous: "",
+            pages: 0,
             activePage: 1,
-        }
+        };
+        this.handleChange = this.handleChange.bind(this)
     }
 
     componentDidMount() {
-        axios.get('http://127.0.0.1:8000/api/novels').then(response => {
-            this.setState({count: response.data.count, novels: response.data.results, next: response.data.next, previous: response.data.previous});
+        axios.get('http://127.0.0.1:8000/api/novels/?page=' + this.state.activePage).then(response => {
+            this.setState({
+                count: response.data.count,
+                novels: response.data.results,
+                next: response.data.next,
+                previous: response.data.previous,
+                pages: response.data.pages
+            });
         })
     }
 
+    handleChange = (event, value) => {
+        this.setState({activePage: value})
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevState.activePage !== this.state.activePage) {
+            axios.get('http://127.0.0.1:8000/api/novels/?page=' + this.state.activePage).then(response => {
+                this.setState({
+                    count: response.data.count,
+                    novels: response.data.results,
+                    next: response.data.next,
+                    previous: response.data.previous,
+                    pages: response.data.pages
+                });
+            })
+        }
+    }
+
     render() {
-        return (
+        return [
             <Router>
                 <Switch>
                     <Route exact path="/">
                         <NovelsGrid novels={this.state.novels}/>
                     </Route>
-                    <Route exact path="/novel/:novelId">
-                        <Novel novel={this.state.novels[1]}/>
-                    </Route>
-{/*                    {this.state.novels.map(value => {
-                        return [
-                            <Route exact path={"/novel/" + value.id + "/" + value.name.replace(/ /gi, "_")}>
-                                <Novel novel={value}/>
-                            </Route>,
-                            <Route exact path={"/novel/" + value.id}>
-                                <Redirect to={"/novel/" + value.id + "/" + value.name.replace(/ /gi, "_")}/>
-                            </Route>
-                        ]
-                    })}*/}
+                    <Route exact path="/novel/:id" component={Novel}/>
                 </Switch>
-            </Router>
-        )
+            </Router>,
+            <Pagination
+                count={this.state.pages}
+                page={this.state.activePage}
+                onChange={this.handleChange}
+            />
+        ]
     }
 }
 

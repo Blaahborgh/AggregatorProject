@@ -59,7 +59,7 @@ export default function SpacingGrid(props) {
                         return (
                             <Grid key={value.id} item>
                                 <Card className={classes.card} variant="outlined">
-                                    <Link href={"/novel/" + value.id + "/" + value.name.replace(/ /gi, "_")}
+                                    <Link href={"/novel/" + value.id}
                                           color="inherit">
                                         <CardMedia
                                             className={classes.media}
@@ -70,7 +70,7 @@ export default function SpacingGrid(props) {
                                     </Link>
                                     <CardContent>
                                         <Typography gutterBottom variant="h6" display="inline">
-                                            <Link href={"/novel/" + value.id + "/" + value.name.replace(/ /gi, "_")}
+                                            <Link href={"/novel/" + value.id}
                                                   color="inherit">
                                                 {value.name}
                                             </Link>
