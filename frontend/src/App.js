@@ -1,54 +1,47 @@
 import React from 'react';
 import './App.css';
 import NovelsGrid from "./components/NovelsGrid";
-import Novel from "./components/Novel";
 import axios from "axios";
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
 
 class App extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             count: 0,
             novels: [],
             next: "",
             previous: "",
             pages: 0,
-            activePage: 1,
+            activePage: 0,
         };
         this.handleChange = this.handleChange.bind(this)
     }
 
-    componentDidMount() {
-        axios.get('http://127.0.0.1:8000/api/novels/?page=' + this.state.activePage).then(response => {
-            this.setState({
-                count: response.data.count,
-                novels: response.data.results,
-                next: response.data.next,
-                previous: response.data.previous,
-                pages: response.data.pages
-            });
-        })
-    }
-
     handleChange = (event, value) => {
-        this.setState({activePage: value})
+        const {history} = this.props;
+        history.push("/?page=" + value)
+    };
+
+    componentDidMount() {
+        this.loadPage()
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevState.activePage !== this.state.activePage) {
-            axios.get('http://127.0.0.1:8000/api/novels/?page=' + this.state.activePage).then(response => {
+        this.loadPage()
+    }
+
+    loadPage() {
+        const params = new URLSearchParams(this.props.location.search);
+        const page = parseInt(params.get('page'), 10) || 1;
+        if (page !== this.state.activePage) {
+            axios.get('http://127.0.0.1:8000/api/novels/?page=' + page).then(response => {
                 this.setState({
                     count: response.data.count,
                     novels: response.data.results,
-                    next: response.data.next,
-                    previous: response.data.previous,
-                    pages: response.data.pages
+                    pages: response.data.pages,
+                    activePage: page
                 });
             })
         }
@@ -56,21 +49,14 @@ class App extends React.Component {
 
     render() {
         return [
-            <Router>
-                <Switch>
-                    <Route exact path="/">
-                        <NovelsGrid novels={this.state.novels}/>
-                    </Route>
-                    <Route exact path="/novel/:id" component={Novel}/>
-                </Switch>
-            </Router>,
+            <NovelsGrid novels={this.state.novels}/>,
             <Pagination
-                count={this.state.pages}
                 page={this.state.activePage}
+                count={this.state.pages}
                 onChange={this.handleChange}
             />
         ]
     }
 }
 
-export default App;
+export default withRouter(App);
