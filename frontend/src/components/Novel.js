@@ -34,6 +34,7 @@ class Novel extends React.Component {
     }
 
     componentDidMount() {
+        console.log(this.props.match)
         axios.get('http://127.0.0.1:8000/api/novels/' + this.props.match.params.id).then(response => {
             this.setState({
                 image: response.data.image,
