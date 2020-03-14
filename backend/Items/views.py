@@ -6,7 +6,7 @@ from .serializers import NovelSerializer, AuthorSerielizer, TagSerializer
 
 
 class StandardNovelPagination(PageNumberPagination):
-    page_size = 5
+    page_size = 20
 
     def get_paginated_response(self, data):
         response = super(StandardNovelPagination, self).get_paginated_response(data)

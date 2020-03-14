@@ -5,22 +5,27 @@ from bs4 import BeautifulSoup
 from django.core.management.base import BaseCommand, CommandError
 from Items.models import Novel, Author, Tag
 
-f = open("configs.json", "r")
+f = open("configs.json", "r", encoding='utf-8')
 f1 = f.read()
 config = json.loads(f1)
 i = 0
 
 
 def get_pagination(soup):
+    try:
         return config[i]['siteurl'] + soup.find(config[i]['paginationpath']['tag'],
-                                                text=re.compile(config[i]['paginationpath']['text'])).get(
-            config[i]['paginationpath']['getattr'])
+                                            text=re.compile(config[i]['paginationpath']['text'])).get(
+        config[i]['paginationpath']['getattr'])
+    except:
+        return "Last"
 
 
 def fiction_page_soup(url):
-    page1 = requests.get(url)
-    return BeautifulSoup(page1.text, 'html.parser')
-
+    page = requests.get(url)
+    if page.status_code == 200:
+        return BeautifulSoup(page.text, 'html.parser')
+    else:
+        return False
 
 def get_author(fictionpage):
     return fictionpage.find(config[i]['authorpath']['tag'],
@@ -82,6 +87,8 @@ def fiction_list_soup(soup):
     for fiction in soup.find_all(config[i]['listpath']['tag'],
                                  {config[i]['listpath']['attr']: config[i]['listpath']['attrvalue']}):
         fictionpage = fiction_page_soup(get_url(fiction))
+        if fictionpage == False:
+            continue
         authorobj, created = Author.objects.get_or_create(
             name=get_author(fictionpage)
         )
@@ -106,14 +113,15 @@ class Command(BaseCommand):
     help = 'Populate database with output from parser'
 
     def handle(self, *args, **options):
-        initialurl = config[i]['initialurl']
-        page = requests.get(initialurl)
+        url = config[i]['initialurl']
+        page = requests.get(url)
         soup = BeautifulSoup(page.text, 'html.parser')
-        state = get_pagination(soup)
-        while state != "Last":
+        url = get_pagination(soup)
+        while url != "Last":
+            print("----------------------------------------\nNext page:" + url)
             fiction_list_soup(soup)
-            soup = fiction_page_soup(state)
-            state = get_pagination(soup)
+            soup = fiction_page_soup(url)
+            url = get_pagination(soup)
         else:
+            print("----------------------------------------\nThis is last page")
             fiction_list_soup(soup)
-            print("Last page has been parsed")

@@ -29,8 +29,8 @@
     } ,
     "chcountpath": {
       "tag": "td" ,
-      "attr": "" ,
-      "attrvalue": "" ,
+      "attr": "class" ,
+      "attrvalue": "text-right" ,
       "getattr": "data-order"
     } ,
     "urlpath": {
@@ -45,7 +45,13 @@
       "attrvalue": "image" ,
       "getattr": "src"
     } ,
-    "nextpagepath": ""
+    "paginationpath": {
+      "tag": "a" ,
+      "text": "Next ›" ,
+      "attr": "href" ,
+      "attrvalue": "" ,
+      "getattr": "href"
+    }
   } ,
   {
     "COMMENT1": "единой страницы для доступа ко ВСЕМ книгам нет, надо запускать скрипт по отдельности по страницам категорий(21)" ,
@@ -96,6 +102,12 @@
       "attrvalue": "lazy cimage" ,
       "getattr": "data-original"
     } ,
-    "nextpagepath": ""
+    "paginationpath": {
+      "tag": "" ,
+      "text": "" ,
+      "attr": "href" ,
+      "attrvalue": "" ,
+      "getattr": "href"
+    }
   }
 ]
