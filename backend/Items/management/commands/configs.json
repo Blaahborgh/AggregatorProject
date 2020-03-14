@@ -45,7 +45,13 @@
       "attrvalue": "image" ,
       "getattr": "src"
     } ,
-    "nextpagepath": ""
+    "paginationpath": {
+      "tag": "a" ,
+      "text": "Next" ,
+      "attr": "href" ,
+      "attrvalue": "" ,
+      "getattr": "href"
+    }
   } ,
   {
     "COMMENT1": "единой страницы для доступа ко ВСЕМ книгам нет, надо запускать скрипт по отдельности по страницам категорий(21)" ,

@@ -2,8 +2,9 @@ import React from 'react';
 import './App.css';
 import NovelsGrid from "./components/NovelsGrid";
 import axios from "axios";
-import {withRouter} from "react-router-dom";
+import {Link} from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
+import PaginationItem from "@material-ui/lab/PaginationItem";
 
 class App extends React.Component {
     constructor(props) {
@@ -16,13 +17,7 @@ class App extends React.Component {
             pages: 0,
             activePage: 0,
         };
-        this.handleChange = this.handleChange.bind(this)
     }
-
-    handleChange = (event, value) => {
-        const {history} = this.props;
-        history.push("/?page=" + value)
-    };
 
     componentDidMount() {
         this.loadPage()
@@ -53,10 +48,16 @@ class App extends React.Component {
             <Pagination
                 page={this.state.activePage}
                 count={this.state.pages}
-                onChange={this.handleChange}
+                renderItem={item => (
+                    <PaginationItem
+                        component={Link}
+                        to={`/${item.page === 1 ? '' : `?page=${item.page}`}`}
+                        {...item}
+                    />
+                )}
             />
         ]
     }
 }
 
-export default withRouter(App);
+export default App;
