@@ -14,18 +14,19 @@ i = 0
 def get_pagination(soup):
     try:
         return config[i]['siteurl'] + soup.find(config[i]['paginationpath']['tag'],
-                                            text=re.compile(config[i]['paginationpath']['text'])).get(
-        config[i]['paginationpath']['getattr'])
+                                                text=re.compile(config[i]['paginationpath']['text'])).get(
+            config[i]['paginationpath']['getattr'])
     except:
         return "Last"
 
 
-def fiction_page_soup(url):
+def get_soup(url):
     page = requests.get(url)
     if page.status_code == 200:
         return BeautifulSoup(page.text, 'html.parser')
     else:
         return False
+
 
 def get_author(fictionpage):
     return fictionpage.find(config[i]['authorpath']['tag'],
@@ -39,7 +40,7 @@ def get_name(fiction):
 
 
 def get_tags(fictionpage):
-    if (config[i]['siteurl'] == "https://www.fictionpress.com"):
+    if "fictionpress" in config[i]['initialurl']:
         for tag in fictionpage.find_all(config[i]['tagspath']['tag'],
                                         {config[i]['tagspath']['attr']: config[i]['tagspath']['attrvalue']}):
             line = tag.get_text(strip=True).split(' - ')
@@ -59,6 +60,14 @@ def get_desc(fictionpage):
 
 
 def get_chcount(fictionpage):
+    if "scribblehub" in config[i]['initialurl']:
+        output = fictionpage.find(config[i]['chcountpath']['tag'], {
+            config[i]['chcountpath']['attr']: config[i]['chcountpath']['attrvalue']}).get_text()
+        try:
+            if output:
+                return int(output)
+        except UnboundLocalError:
+            return 0
     for chapters in fictionpage.find_all(config[i]['chcountpath']['tag'], {
         config[i]['chcountpath']['attr']: config[i]['chcountpath']['attrvalue']}): pass
     try:
@@ -86,7 +95,7 @@ def get_image(fictionpage):
 def fiction_list_soup(soup):
     for fiction in soup.find_all(config[i]['listpath']['tag'],
                                  {config[i]['listpath']['attr']: config[i]['listpath']['attrvalue']}):
-        fictionpage = fiction_page_soup(get_url(fiction))
+        fictionpage = get_soup(get_url(fiction))
         if fictionpage == False:
             continue
         authorobj, created = Author.objects.get_or_create(
@@ -94,7 +103,7 @@ def fiction_list_soup(soup):
         )
         novelobj, created = Novel.objects.get_or_create(
             author=authorobj,
-            name=get_name(fiction),
+            name=get_name(fictionpage),
             desc=get_desc(fictionpage),
             chcount=get_chcount(fictionpage),
             url=get_url(fiction),
@@ -113,14 +122,12 @@ class Command(BaseCommand):
     help = 'Populate database with output from parser'
 
     def handle(self, *args, **options):
-        url = config[i]['initialurl']
-        page = requests.get(url)
-        soup = BeautifulSoup(page.text, 'html.parser')
+        soup = get_soup(config[i]['initialurl'])
         url = get_pagination(soup)
         while url != "Last":
             print("----------------------------------------\nNext page:" + url)
             fiction_list_soup(soup)
-            soup = fiction_page_soup(url)
+            soup = get_soup(url)
             url = get_pagination(soup)
         else:
             print("----------------------------------------\nThis is last page")

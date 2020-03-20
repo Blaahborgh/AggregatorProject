@@ -4,6 +4,7 @@ import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from "@material-ui/core/Button";
 import axios from "axios";
+import Page404 from "./Page404";
 
 const useStyles = theme => ({
     root: {
@@ -29,7 +30,9 @@ class Novel extends React.Component {
             name: "",
             author: "",
             tags: [],
-            desc: ""
+            desc: "",
+            urls: "",
+            hasError: false
         }
     }
 
@@ -40,21 +43,36 @@ class Novel extends React.Component {
                 name: response.data.name,
                 author: response.data.author,
                 tags: response.data.tags,
-                desc: response.data.desc
+                desc: response.data.desc,
+                urls: response.data.url
             });
         })
+            .catch(error=> {
+                this.setState({hasError: true})
+            })
     }
 
     render() {
         const {classes} = this.props
+        let site = ""
+        if (this.state.urls.includes("royalroad")){
+            site = "Royalroad"
+        }
+
+        if (this.state.hasError){
+            return(
+                <Page404/>
+            )
+        }
+
         return (
-            <Grid container className={classes.root} justify="center" spacing={2}>
+            <Grid container className={classes.root} justify="center">
                 <Grid container item xs={8}>
                     <Grid item xs={2} style={{minWidth: "200px"}}>
                         <img className={classes.image} src={this.state.image} alt=""/>
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography gutterBottom variant="h5">
+                        <Typography gutterBottom variant="h4">
                             {this.state.name}
                         </Typography>
                         <Typography variant="body1" color="textSecondary" component="p"
@@ -72,6 +90,10 @@ class Novel extends React.Component {
                                 </Button>
                             )
                         })}
+                        <Typography style={{marginTop: "10px"}}>Links: </Typography>
+                        <Typography>
+                            <a href={this.state.urls} target="_blank" rel="noopener noreferrer">{site}</a>
+                        </Typography>
                     </Grid>
                 </Grid>
                 <Grid container item xs={12}>
@@ -92,55 +114,4 @@ class Novel extends React.Component {
 }
 
 export default withStyles(useStyles)(Novel);
-
-/*export default function Novel() {
-    const classes = useStyles();
-    const novelId = useParams()
-    console.log(novelId)
-    const [novel, setNovel] = useState('')
-    useEffect(()=>{
-        axios.get('http://127.0.0.1:8000/api/novels/1').then(response => console.log(response.data))
-    }, [])
-    console.log(novel)
-    return (
-        <Grid container className={classes.root} justify="center" spacing={2}>
-            <Grid container item xs={8}>
-                <Grid item xs={2} style={{minWidth: "200px"}}>
-                    <img className={classes.image} src={novel.image} alt=""/>
-                </Grid>
-                <Grid item xs={6} style={{flexShrink: 1}}>
-                    <Typography gutterBottom variant="h5">
-                        {novel.name}
-                    </Typography>
-                    <Typography variant="body1" color="textSecondary" component="p"
-                                display="inline">
-                        {" by "}
-                    </Typography>
-                    <Typography variant="h6" display="inline">
-                        {novel.author}
-                    </Typography>
-                    <Typography></Typography>
-                    {novel.tags.map(tag => {
-                        return (
-                            <Button key={tag} className={classes.tags} variant="contained">
-                                {tag}
-                            </Button>
-                        )
-                    })}
-                </Grid>
-            </Grid>
-            <Grid container item xs={12}>
-                <Grid item xs={2}>
-                </Grid>
-                <Grid item xs={6}>
-                    <Typography variant="body1" color="textSecondary" component="p" style={{whiteSpace: "pre-line"}}>
-                        {novel.desc}
-                    </Typography>
-                </Grid>
-                <Grid item xs={4}>
-                </Grid>
-            </Grid>
-        </Grid>
-    )
-}*/
 

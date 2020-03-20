@@ -9,6 +9,7 @@ import {
     Route,
 } from "react-router-dom";
 import Novel from "./components/Novel";
+import Page404 from "./components/Page404";
 
 ReactDOM.render(<TopBar />, document.getElementById('bar'));
 ReactDOM.render(
@@ -16,6 +17,7 @@ ReactDOM.render(
         <Switch>
             <Route exact path="/novel/:id" component={Novel}/>
             <Route exact path="/" component={App}/>
+            <Route component={Page404} status={404}/>
         </Switch>
     </Router>
     , document.getElementById('root')

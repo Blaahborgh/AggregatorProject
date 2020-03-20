@@ -2,9 +2,8 @@ import React from 'react';
 import './App.css';
 import NovelsGrid from "./components/NovelsGrid";
 import axios from "axios";
-import {Link} from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
-import PaginationItem from "@material-ui/lab/PaginationItem";
+import Page404 from "./components/Page404";
 
 class App extends React.Component {
     constructor(props) {
@@ -16,14 +15,11 @@ class App extends React.Component {
             previous: "",
             pages: 0,
             activePage: 0,
+            hasError: false
         };
     }
 
     componentDidMount() {
-        this.loadPage()
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
         this.loadPage()
     }
 
@@ -39,22 +35,33 @@ class App extends React.Component {
                     activePage: page
                 });
             })
+                .catch(error => {
+                    this.setState({hasError: true})
+                })
         }
     }
 
+    handleChange(event, value){
+        window.location.href = "?page=" + value
+    }
+
     render() {
+        if (this.state.hasError) {
+            return (
+                <Page404/>
+            )
+        }
+
         return [
             <NovelsGrid novels={this.state.novels}/>,
             <Pagination
                 page={this.state.activePage}
                 count={this.state.pages}
-                renderItem={item => (
-                    <PaginationItem
-                        component={Link}
-                        to={`/${item.page === 1 ? '' : `?page=${item.page}`}`}
-                        {...item}
-                    />
-                )}
+                onChange={this.handleChange}
+                showFirstButton
+                showLastButton
+                boundaryCount={1}
+                siblingCount={4}
             />
         ]
     }
