@@ -1,9 +1,12 @@
 import React from 'react';
-import './App.css';
 import NovelsGrid from "./components/NovelsGrid";
 import axios from "axios";
-import Pagination from "@material-ui/lab/Pagination";
 import Page404 from "./components/Page404";
+import Grid from "@material-ui/core/Grid";
+import SearchGrid from "./components/SearchGrid";
+
+import Typography from '@material-ui/core/Typography';
+
 
 class App extends React.Component {
     constructor(props) {
@@ -15,7 +18,9 @@ class App extends React.Component {
             previous: "",
             pages: 0,
             activePage: 0,
-            hasError: false
+            hasError: false,
+            tags: [],
+            expanded: false
         };
     }
 
@@ -26,23 +31,27 @@ class App extends React.Component {
     loadPage() {
         const params = new URLSearchParams(this.props.location.search);
         const page = parseInt(params.get('page'), 10) || 1;
-        if (page !== this.state.activePage) {
-            axios.get('http://127.0.0.1:8000/api/novels/?page=' + page).then(response => {
-                this.setState({
-                    count: response.data.count,
-                    novels: response.data.results,
-                    pages: response.data.pages,
-                    activePage: page
-                });
-            })
-                .catch(error => {
-                    this.setState({hasError: true})
-                })
-        }
-    }
 
-    handleChange(event, value){
-        window.location.href = "?page=" + value
+        axios.get('http://127.0.0.1:8000/api/novels/' + this.props.location.search).then(response => {
+            this.setState({
+                count: response.data.count,
+                novels: response.data.results,
+                pages: response.data.pages,
+                activePage: page
+            })
+        })
+            .catch(error => {
+                this.setState({hasError: true})
+            });
+
+        axios.get('http://127.0.0.1:8000/api/tags').then(response => {
+            this.setState({
+                tags: response.data
+            })
+        })
+            .catch(error => {
+                this.setState({hasError: true})
+            });
     }
 
     render() {
@@ -52,18 +61,17 @@ class App extends React.Component {
             )
         }
 
-        return [
-            <NovelsGrid novels={this.state.novels}/>,
-            <Pagination
-                page={this.state.activePage}
-                count={this.state.pages}
-                onChange={this.handleChange}
-                showFirstButton
-                showLastButton
-                boundaryCount={1}
-                siblingCount={4}
-            />
-        ]
+        return (
+            <Grid container spacing={2}>
+                <Grid container item xs={12} justify="center">
+                    <SearchGrid tags={this.state.tags}/>
+                </Grid>
+                <Grid container item xs={12}>
+                    <NovelsGrid novels={this.state.novels} page={this.state.activePage} pages={this.state.pages}
+                                count={this.state.count}/>
+                </Grid>
+            </Grid>
+        )
     }
 }
 

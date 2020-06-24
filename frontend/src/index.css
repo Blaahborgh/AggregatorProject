@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+div [id="id"] {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}

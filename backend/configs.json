@@ -54,8 +54,8 @@
     }
   } ,
   {
-    "siteurl": "https://www.scribblehub.com/series-ranking/" ,
-    "initialurl": "https://www.scribblehub.com/series-ranking/?sort=2&order=4" ,
+    "siteurl": "https://www.scribblehub.com" ,
+    "initialurl": "https://www.scribblehub.com/series-ranking/" ,
     "listpath": {
       "tag": "div" ,
       "attr": "class" ,

@@ -8,13 +8,13 @@ from Items.models import Novel, Author, Tag
 f = open("configs.json", "r", encoding='utf-8')
 f1 = f.read()
 config = json.loads(f1)
-i = 0
+i = 1
 
 
 def get_pagination(soup):
     try:
-        return config[i]['siteurl'] + soup.find(config[i]['paginationpath']['tag'],
-                                                text=re.compile(config[i]['paginationpath']['text'])).get(
+        return config[i]['initialurl'] + soup.find(config[i]['paginationpath']['tag'],
+                                                   text=re.compile(config[i]['paginationpath']['text'])).get(
             config[i]['paginationpath']['getattr'])
     except:
         return "Last"
@@ -55,8 +55,10 @@ def get_tags(fictionpage):
 
 
 def get_desc(fictionpage):
-    return fictionpage.find(config[i]['descpath']['tag'],
-                            {config[i]['descpath']['attr']: config[i]['descpath']['attrvalue']}).get_text()
+    return fictionpage.find(
+        config[i]['descpath']['tag'],
+        {config[i]['descpath']['attr']: config[i]['descpath']['attrvalue']}
+    ).get_text()
 
 
 def get_chcount(fictionpage):
@@ -78,6 +80,11 @@ def get_chcount(fictionpage):
 
 
 def get_url(fiction):
+    if "scribblehub" in config[i]['initialurl']:
+        return fiction.find(config[i]['urlpath']['tag'],
+                                                   {config[i]['urlpath']['attr']: config[i]['urlpath'][
+                                                       'attrvalue']}).get(
+            config[i]['urlpath']['getattr'])
     return config[i]['siteurl'] + fiction.find(config[i]['urlpath']['tag'],
                                                {config[i]['urlpath']['attr']: config[i]['urlpath']['attrvalue']}).get(
         config[i]['urlpath']['getattr'])
@@ -92,9 +99,8 @@ def get_image(fictionpage):
         return 'null'
 
 
-def fiction_list_soup(soup):
-    for fiction in soup.find_all(config[i]['listpath']['tag'],
-                                 {config[i]['listpath']['attr']: config[i]['listpath']['attrvalue']}):
+def fiction_list(soup):
+    for fiction in soup.find_all(config[i]['listpath']['tag'], {config[i]['listpath']['attr']: config[i]['listpath']['attrvalue']}):
         fictionpage = get_soup(get_url(fiction))
         if fictionpage == False:
             continue
@@ -113,22 +119,19 @@ def fiction_list_soup(soup):
             tagobj, created = Tag.objects.get_or_create(
                 name=tag
             )
-            # print(tagobj.name)
             novelobj.tags.add(tagobj)
         print(novelobj.name)
 
 
 class Command(BaseCommand):
-    help = 'Populate database with output from parser'
+    help = 'Activate parser and populate database'
 
     def handle(self, *args, **options):
         soup = get_soup(config[i]['initialurl'])
         url = get_pagination(soup)
         while url != "Last":
-            print("----------------------------------------\nNext page:" + url)
-            fiction_list_soup(soup)
+            fiction_list(soup)
             soup = get_soup(url)
             url = get_pagination(soup)
         else:
-            print("----------------------------------------\nThis is last page")
-            fiction_list_soup(soup)
+            fiction_list(soup)
