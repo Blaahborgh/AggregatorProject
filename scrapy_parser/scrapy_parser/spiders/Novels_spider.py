@@ -1,31 +1,21 @@
 import scrapy
 
-class RoyalroadSpider(scrapy.Spider):
-    name = "royalroad"
+
+class ParentalSpider(scrapy.Spider):
+    name = "parent"
+    start_urls = []
     namepath = ''
     authorpath = ''
-    urlpath = ''
-    tagspath = []
-    descpath = []
+    tagspath = ''
+    descpath = ''
     chcountpath = ''
     imagepath = ''
+    urlpath = ''
     pagerpath = ''
-
-    def start_requests(self):
-        url = 'https://www.royalroad.com/fictions/best-rated'
-        self.namepath = '//h1[@property="name"]/text()'
-        self.authorpath = '//span[@property="name"]/a/text()'
-        self.tagspath = '//span[@property="genre"]/text()'
-        self.descpath = '//div[@property="description"]//text()'
-        self.chcountpath = '//td[@data-order]'
-        self.imagepath = '//img[@property="image"]/@src'
-        self.urlpath = '//h2[@class="fiction-title"]/a'
-        self.pagerpath = '//a[contains(text(), "Next")]'
-        yield scrapy.Request(url, self.parse)
 
     def parse(self, response):
         yield from response.follow_all(response.xpath(self.urlpath), self.parse_fic)
-        yield from response.follow(response.xpath(self.pagerpath), self.parse)
+        yield from response.follow_all(response.xpath(self.pagerpath), self.parse)
 
     def parse_fic(self, response):
         udesc = ''
@@ -42,17 +32,31 @@ class RoyalroadSpider(scrapy.Spider):
         }
 
 
+class RoyalroadSpider(ParentalSpider):
+    name = "royalroad"
+    start_urls = [
+        'https://www.royalroad.com/fictions/best-rated'
+    ]
+    namepath = '//h1[@property="name"]/text()'
+    authorpath = '//span[@property="name"]/a/text()'
+    tagspath = '//span[@property="genre"]/text()'
+    descpath = '//div[@property="description"]//text()'
+    chcountpath = '//td[@data-order]'
+    imagepath = '//img[@property="image"]/@src'
+    urlpath = '//h2[@class="fiction-title"]/a'
+    pagerpath = '//a[contains(text(), "Next")]'
+
+
 class ScribblehubSpider(RoyalroadSpider):
     name = "scribblehub"
-
-    def start_requests(self):
-        url = 'https://www.scribblehub.com/series-ranking/'
-        self.namepath = '//div[@class="fic_title"]/text()'
-        self.authorpath = '//span[@class="auth_name_fic"]/text()'
-        self.tagspath = '//a[@id="etagme"]/text()'
-        self.descpath = '//div[@property="description"]//text()'
-        self.chcountpath = '//li[@toc_w]'
-        self.imagepath = '//img[@property="image"]/@src'
-        self.urlpath = '//div[@class="search_title"]/a'
-        self.pagerpath = '//li[@class="page-link next")]/a'
-        yield scrapy.Request(url, self.parse)
+    start_urls = [
+        'https://www.scribblehub.com/series-ranking/'
+    ]
+    namepath = '//div[@class="fic_title"]/text()'
+    authorpath = '//span[@class="auth_name_fic"]/text()'
+    tagspath = '//a[@id="etagme"]/text()'
+    descpath = '//div[@property="description"]//text()'
+    chcountpath = '//li[@toc_w]'
+    imagepath = '//img[@property="image"]/@src'
+    urlpath = '//div[@class="search_title"]/a'
+    pagerpath = '//li[@class="page-link next")]/a'
