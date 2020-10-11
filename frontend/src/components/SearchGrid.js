@@ -3,7 +3,6 @@ import TextField from "@material-ui/core/TextField";
 import SearchIcon from '@material-ui/icons/Search';
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
-import {useLocation} from "react-router-dom";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {makeStyles} from '@material-ui/core/styles';
 import FormControl from "@material-ui/core/FormControl";
@@ -15,6 +14,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {useHistory} from "react-router-dom"
 
 
 const useStyles = makeStyles(theme => ({
@@ -36,71 +36,45 @@ const useStyles = makeStyles(theme => ({
 
 export default function SearchGrid(props) {
     const classes = useStyles();
-    const location = useLocation();
-    const query = new URLSearchParams(location.search);
-    const [name, setName] = React.useState(query.get("search"));
-    let tagnames = [];
-    props.tags.forEach(function (item, i, arr) {
-        tagnames.push(item.name)
-    })
-    const [tags, setTags] = React.useState(query.getAll("tags"))
-    const [author, setAuthor] = React.useState(query.get("author"))
-    const [ordering, setOrdering] = React.useState(query.get("ordering"))
-    const [chcount_min, setChmin] = React.useState(query.get("chcount_min"))
-    const [chcount_max, setChmax] = React.useState(query.get("chcount_max"))
+    const history = useHistory();
+    const query = new URLSearchParams(props.location.search);
+    const [state, setState] = React.useState({
+        search: query.get("search"),
+        tags: query.getAll("tags"),
+        author: query.get("author"),
+        ordering: query.get("ordering"),
+        chcount_min: query.get("chcount_min"),
+        chcount_max: query.get("chcount_max")
+    });
+
+    const handleFieldChange = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        setState(prevState => {
+            prevState[name] = value;
+            return ({
+                ...prevState
+            })
+        })
+    };
+
+    const handleTagsChange = (e, value) => {
+        const val = value;
+        setState(prevState => {
+            prevState.tags = val;
+            return ({
+                ...prevState
+            })
+        })
+    };
 
     const handleSearchClick = (e) => {
-        query.delete("page")
-        query.delete("search")
-        if (name) {
-            query.set("search", name);
-        }
-        query.delete("author")
-        if (author) {
-            query.set("author", author)
-        }
-        query.delete("tags")
-        tags.forEach(function (item, i, arr) {
-            query.append("tags", item)
-        })
-        query.delete("ordering")
-        if (ordering) {
-            query.set("ordering", ordering)
-        }
-        query.delete("chcount_min")
-        if (chcount_min) {
-            query.set("chcount_min", chcount_min)
-        }
-        query.delete("chcount_max")
-        if (chcount_max) {
-            query.set("chcount_max", chcount_max)
-        }
-        window.location.href = "?" + query
-    }
-
-    const handleNameChange = (e) => {
-        setName(e.target.value)
-    }
-
-    const handleTagsChange = (event, value) => {
-        setTags(value)
-    }
-
-    const handleAuthorChange = (e) => {
-        setAuthor(e.target.value)
-    }
-
-    const handleOrderingChange = (e) => {
-        setOrdering(e.target.value)
-    }
-
-    const handleChminChange = (e) => {
-        setChmin(e.target.value)
-    }
-
-    const handleChmaxChange = (e) => {
-        setChmax(e.target.value)
-    }
+        const newQuery = new URLSearchParams();
+        Object.entries(state).map(([field, value]) => (
+            value && value.map(val => (newQuery.append(field, val)))
+        ));
+        history.push("?" + newQuery)
+    };
 
     return (
         <ExpansionPanel className={classes.panel}>
@@ -115,32 +89,32 @@ export default function SearchGrid(props) {
                 <Grid container className={classes.root} justify="center" spacing={2}>
                     <Grid container item justify="center" spacing={4}>
                         <Grid item>
-                            <TextField id="name-box" label="Search by name" value={name || ""} type="search"
-                                       onChange={handleNameChange}/>
+                            <TextField name="search" label="Search by name" value={state.search || ""} type="search"
+                                       onChange={handleFieldChange}/>
                         </Grid>
                         <Grid item>
-                            <TextField id="author-box" label="Search by author" value={author || ""} type="search"
-                                       onChange={handleAuthorChange}/>
+                            <TextField name="author" label="Search by author" value={state.author || ""} type="search"
+                                       onChange={handleFieldChange}/>
                         </Grid>
                     </Grid>
                     <Grid container item justify="center" spacing={4}>
                         <Grid item>
-                            <TextField label="Minimum chapters" type="number" value={chcount_min || ""}
-                                       onChange={handleChminChange}/>
+                            <TextField name="chcount_min" label="Minimum chapters" type="number"
+                                       value={state.chcount_min || ""}
+                                       onChange={handleFieldChange}/>
                         </Grid>
                         <Grid item>
-                            <TextField label="Maximum chapters" type="number" value={chcount_max || ""}
-                                       onChange={handleChmaxChange}/>
+                            <TextField name="chcount_max" label="Maximum chapters" type="number"
+                                       value={state.chcount_max || ""}
+                                       onChange={handleFieldChange}/>
                         </Grid>
                     </Grid>
                     <Grid container item justify="center">
                         <Autocomplete
                             className={classes.tagbox}
                             multiple
-                            id="tags-outlined"
-                            options={tagnames}
-                            getOptionLabel={(option) => option}
-                            value={tags || ""}
+                            options={props.tags.map(tag => (tag.name))}
+                            value={state.tags || ""}
                             disableCloseOnSelect={true}
                             filterSelectedOptions
                             onChange={(event, value) => handleTagsChange(event, value)}
@@ -156,8 +130,9 @@ export default function SearchGrid(props) {
                         <FormControl className={classes.formControl}>
                             <InputLabel>Ordering</InputLabel>
                             <Select
-                                value={ordering || ""}
-                                onChange={handleOrderingChange}
+                                name="ordering"
+                                value={state.ordering || ""}
+                                onChange={handleFieldChange}
                             >
                                 <MenuItem value="">
                                     <em>By name</em>
@@ -170,7 +145,7 @@ export default function SearchGrid(props) {
                         </FormControl>
                     </Grid>
                     <Grid container item justify="center">
-                        <IconButton aria-label="search-button" onClick={handleSearchClick} style={{height: "50px"}}>
+                        <IconButton onClick={handleSearchClick} style={{height: "50px"}}>
                             <SearchIcon/>
                         </IconButton>
                     </Grid>

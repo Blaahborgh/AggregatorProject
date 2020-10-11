@@ -1,12 +1,14 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
-import {withStyles} from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from "@material-ui/core/Button";
-import axios from "axios";
 import Page404 from "./Page404";
+import api from "../api";
+import {Link} from "@material-ui/core";
 
-const useStyles = theme => ({
+
+const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
     },
@@ -20,70 +22,38 @@ const useStyles = theme => ({
         marginRight: "5px",
         marginTop: "5px",
     }
-})
+}));
 
-class Novel extends React.Component {
-    constructor() {
-        super()
-        this.state = {
-            image: "",
-            name: "",
-            author: "",
-            tags: [],
-            desc: "",
-            urls: "",
-            hasError: false
-        }
+export default function Novel(props) {
+    const classes = useStyles();
+    const requestNovel = api.useGetRequest('novels/' + props.match.params.id);
+
+    if (requestNovel.loaded && requestNovel.error) {
+        return (
+            <Page404/>
+        )
     }
 
-    componentDidMount() {
-        axios.get('http://127.0.0.1:8000/api/novels/' + this.props.match.params.id).then(response => {
-            this.setState({
-                image: response.data.image,
-                name: response.data.name,
-                author: response.data.author,
-                tags: response.data.tags,
-                desc: response.data.desc,
-                urls: response.data.url
-            });
-        })
-            .catch(error=> {
-                this.setState({hasError: true})
-            })
-    }
-
-    render() {
-        const {classes} = this.props
-        let site = ""
-        if (this.state.urls.includes("royalroad")){
-            site = "Royalroad"
-        }
-
-        if (this.state.hasError){
-            return(
-                <Page404/>
-            )
-        }
-
+    if (requestNovel.loaded) {
         return (
             <Grid container className={classes.root} justify="center">
                 <Grid container item xs={8}>
                     <Grid item xs={2} style={{minWidth: "200px"}}>
-                        <img className={classes.image} src={this.state.image} alt=""/>
+                        <img className={classes.image} src={requestNovel.data.image} alt=""/>
                     </Grid>
                     <Grid item xs={6}>
                         <Typography gutterBottom variant="h4">
-                            {this.state.name}
+                            {requestNovel.data.name}
                         </Typography>
                         <Typography variant="body1" color="textSecondary" component="p"
                                     display="inline">
                             {" by "}
                         </Typography>
                         <Typography variant="h6" display="inline">
-                            {this.state.author}
+                            {requestNovel.data.author}
                         </Typography>
                         <Typography></Typography>
-                        {this.state.tags.map(tag => {
+                        {requestNovel.data.tags.map(tag => {
                             return (
                                 <Button key={tag} className={classes.tags} variant="contained">
                                     {tag}
@@ -92,7 +62,9 @@ class Novel extends React.Component {
                         })}
                         <Typography style={{marginTop: "10px"}}>Links: </Typography>
                         <Typography>
-                            <a href={this.state.urls} target="_blank" rel="noopener noreferrer">{site}</a>
+                            <Link href={requestNovel.data.url}>
+                                Royalroad
+                            </Link>
                         </Typography>
                     </Grid>
                 </Grid>
@@ -102,7 +74,7 @@ class Novel extends React.Component {
                     <Grid item xs={6}>
                         <Typography variant="body1" color="textSecondary" component="p"
                                     style={{whiteSpace: "pre-line"}}>
-                            {this.state.desc}
+                            {requestNovel.data.desc}
                         </Typography>
                     </Grid>
                     <Grid item xs={4}>
@@ -110,8 +82,8 @@ class Novel extends React.Component {
                 </Grid>
             </Grid>
         )
+    } else {
+        return (<div>Loading</div>)
     }
 }
-
-export default withStyles(useStyles)(Novel);
 

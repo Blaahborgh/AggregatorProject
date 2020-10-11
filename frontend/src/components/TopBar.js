@@ -8,6 +8,7 @@ import Link from "@material-ui/core/Link";
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
+        marginBottom: "30px"
     },
     title: {
         flexGrow: 1,

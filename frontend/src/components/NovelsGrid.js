@@ -13,7 +13,7 @@ import Link from "@material-ui/core/Link";
 import clsx from "clsx";
 import Button from "@material-ui/core/Button";
 import Pagination from "@material-ui/lab/Pagination";
-import {useLocation} from "react-router-dom";
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -49,17 +49,16 @@ const useStyles = makeStyles(theme => ({
 export default function NovelsGrid(props) {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
-    const location = useLocation();
-    const page = new URLSearchParams(location.search);
+    const page = new URLSearchParams(props.location.search);
 
     const handleExpandClick = (id) => {
         setExpanded(expanded === id ? false : id);
-    }
+    };
 
     const handlePageChange = (event, value) => {
         page.set("page", value);
-        window.location.href = "?" + page
-    }
+        props.history.push("?" + page)
+    };
 
     return (
         <Grid container className={classes.root} justify="center">
@@ -83,7 +82,7 @@ export default function NovelsGrid(props) {
                     return (
                         <Grid key={value.id} item>
                             <Card className={classes.card} variant="outlined">
-                                <Link href={"/novel/" + value.id} color="inherit">
+                                <Link href={"/novels/" + value.id} color="inherit">
                                     <CardMedia
                                         className={classes.media}
                                         component="img"
